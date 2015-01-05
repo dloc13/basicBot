@@ -222,7 +222,8 @@
             motdEnabled: false,
             motdInterval: 5,
             motd: "Temporary Message of the Day",
-            filterChat: false,
+            filterChat: true,
+            cleanupChat: false,
             etaRestriction: false,
             welcome: true,
             opLink: null,
@@ -233,7 +234,7 @@
             website: null,
             intervalMessages: [],
             messageInterval: 5,
-            songstats: true,
+            songstats: false,
             commandLiteral: "!",
             blacklists: {
                 NSFW: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/ExampleNSFWlist.json",
@@ -1050,7 +1051,9 @@
                     }, basicBot.settings.commandCooldown * 1000);
                 }
                 if (executed) {
-                    API.moderateDeleteChat(chat.cid);
+                    if (basicBot.settings.cleanupChat) { // this is now optional, deleting the last line of chat, since it's a bit greedy currently.
+                        API.moderateDeleteChat(chat.cid);
+                    }
                     basicBot.room.allcommand = false;
                     setTimeout(function () {
                         basicBot.room.allcommand = true;
