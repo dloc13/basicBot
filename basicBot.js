@@ -195,7 +195,7 @@
             language: "english",
             chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
             maximumAfk: 120,
-			rulereminder: false,
+			rulereminder: true,
             afkRemoval: true,
             maximumDc: 60,
             bouncerPlus: true,
@@ -1071,7 +1071,6 @@
                     }, basicBot.settings.commandCooldown * 1000);
                 }
                 if (executed) {
-                    API.moderateDeleteChat(chat.cid);
                     basicBot.room.allcommand = false;
                     setTimeout(function () {
                         basicBot.room.allcommand = true;
