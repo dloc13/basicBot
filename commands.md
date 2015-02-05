@@ -16,6 +16,7 @@ Manager
 |!cycletimer | X | set the maximum DJ cycle time for when cycleguard is enabled |
 |!locktimer | X | set the maximum time the waitlist can be locked if lockguard is enabled |
 |!refresh | | refreshes the browser of whoever runs the bot |
+|!rulereminder | X | enable/disable the rule reminder every X minutes |
 |!usercmdcd | X | set the cooldown on commands by grey users |
 |!usercommands | | toggle user commands |
 
