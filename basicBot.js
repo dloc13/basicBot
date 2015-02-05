@@ -193,7 +193,7 @@
         settings: {
             botName: "basicBot",
             language: "english",
-            chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
+            chatLink: "https://rawgit.com/dloc13/basicBot/master/lang/en.json",
             maximumAfk: 120,
 			rulereminder: true,
             afkRemoval: true,
@@ -208,7 +208,7 @@
             voteSkip: false,
             voteSkipLimit: 10,
             timeGuard: true,
-            maximumSongLength: 10,
+            maximumSongLength: 20,
             autodisable: true,
             commandCooldown: 30,
             usercommandsEnabled: true,
