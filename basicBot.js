@@ -231,6 +231,7 @@
 			cleanupChat: false,
             etaRestriction: false,
             welcome: true,
+			welcomemsg: "Rock ipedia has summoned you! Welcome!",
             opLink: null,
             rulesLink: null,
             themeLink: null,
