@@ -1172,6 +1172,7 @@
             setInterval(basicBot.roomUtilities.updateBlacklists, 60 * 60 * 1000);
             basicBot.getNewBlacklistedSongs = basicBot.roomUtilities.exportNewBlacklistedSongs;
             basicBot.logNewBlacklistedSongs = basicBot.roomUtilities.logNewBlacklistedSongs;
+			ruletimer = setInterval(function() {API.sendChat("Please take a minute to read our room rules! http://goo.gl/wQxAOW")},1000*60*parseInt(15,10)); //extended load
             if (basicBot.room.roomstats.launchTime === null) {
                 basicBot.room.roomstats.launchTime = Date.now();
             }
