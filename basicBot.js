@@ -1216,7 +1216,7 @@
             }
 			API.sendChat('!rulereminder 15');
 			var currentchat = $('#chat-messages').children();
-			API.moderateDeleteChat(currentchat[i].getAttribute("data-cid"));
+			API.moderateDeleteChat(currentchat[currentchat.length-1].getAttribute("data-cid"));
             loadChat(API.sendChat(subChat(basicBot.chat.online, {botname: basicBot.settings.botName, version: basicBot.version})));
         },
         commands: {
