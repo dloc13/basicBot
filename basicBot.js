@@ -194,7 +194,8 @@
             language: "english",
             chatLink: "https://rawgit.com/dloc13/basicBot/master/lang/en.json",
             maximumAfk: 120,
-			rulereminder: true,
+			ruletimer: 1,
+			ruletime: 15,
             afkRemoval: true,
             maximumDc: 60,
             bouncerPlus: true,
@@ -1170,8 +1171,10 @@
             setInterval(basicBot.roomUtilities.updateBlacklists, 60 * 60 * 1000);
             basicBot.getNewBlacklistedSongs = basicBot.roomUtilities.exportNewBlacklistedSongs;
             basicBot.logNewBlacklistedSongs = basicBot.roomUtilities.logNewBlacklistedSongs;
-			ruletimer = setInterval(function() {API.sendChat("Please take a minute to read our room rules! http://goo.gl/wQxAOW")},1000*60*parseInt(15,10)); //extended load
-            if (basicBot.room.roomstats.launchTime === null) {
+			if (basicBot.settings.ruletimer) {
+				basicBot.settings.ruletimer = setInterval(function() {API.sendChat("Please take a minute to read our room rules! http://goo.gl/wQxAOW")},1000*60*parseInt(basicBot.settings.ruletime,10)); //extended load
+			}
+			if (basicBot.room.roomstats.launchTime === null) {
                 basicBot.room.roomstats.launchTime = Date.now();
             }
 
