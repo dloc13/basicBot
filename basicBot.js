@@ -1171,7 +1171,7 @@
             basicBot.logNewBlacklistedSongs = basicBot.roomUtilities.logNewBlacklistedSongs;
 			/*if (basicBot.settings.ruletimer) {
 				basicBot.settings.ruletimer = setInterval(function() {API.sendChat("Please take a minute to read our room rules! http://goo.gl/wQxAOW")},1000*60*parseInt(basicBot.settings.ruletime,10)); //extended load
-			}*/
+			} */
 			if (basicBot.room.roomstats.launchTime === null) {
                 basicBot.room.roomstats.launchTime = Date.now();
             }
