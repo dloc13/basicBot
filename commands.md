@@ -80,6 +80,7 @@ Resident DJ
 |Command | Arguments |  Description |
 |:------:|:---------:|:--------------------------------------:|
 |!link | | give a link to the current song
+|!news | (subject) | Read through any of the available newsfeeds. You can list them all by simply using the command without any parameters.
 
 
 

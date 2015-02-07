@@ -194,8 +194,6 @@
             language: "english",
             chatLink: "https://rawgit.com/dloc13/basicBot/master/lang/en.json",
             maximumAfk: 120,
-			ruletimer: 1,
-			ruletime: 15,
             afkRemoval: true,
             maximumDc: 60,
             bouncerPlus: true,
