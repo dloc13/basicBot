@@ -176,7 +176,6 @@
 
     var botCreator = "Matthew aka. Yemasthui";
     var botCreatorIDs = [];
-	var ruletimer;
 	
     var basicBot = {
         version: "2.1.4",
@@ -231,7 +230,6 @@
 			cleanupChat: false,
             etaRestriction: false,
             welcome: true,
-			welcomemsg: "Rock ipedia has summoned you! Welcome!",
             opLink: null,
             rulesLink: null,
             themeLink: null,
