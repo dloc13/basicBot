@@ -920,7 +920,7 @@
 						 
 								display: function (results) {
 									var country = results.query.results.metadata["artist-list"].artist.area.name;
-									var year = results.query.results.metadata["artist-list"].artist.["life-span"].begin;
+									var year = results.query.results.metadata["artist-list"].artist["life-span"].begin;
 									console.log(country + " " + year);
 								}
 						}
