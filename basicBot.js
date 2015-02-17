@@ -896,7 +896,7 @@
 			if (basicBot.settings.quizstate) {
 				
 				console.log(newMedia.author + " " + newMedia.duration);
-				var XMLsource = 'http://musicbrainz.org/ws/2/artist/?query=artist:' + newMedia.author + '&limit=1';
+				var XMLsource = 'http://musicbrainz.org/ws/2/artist/?query=artist:' + newMedia.author.replace(/\s{2,}/g, '%20') + '&limit=1';
 			
 				simpleAJAXLib = {
 						
@@ -921,7 +921,13 @@
 								display: function (results) {
 									var country = results.query.results.metadata["artist-list"].artist.area.name;
 									var year = results.query.results.metadata["artist-list"].artist["life-span"].begin;
-									console.log(country + " " + year);
+									var band = results.query.results.metadata["artist-list"].artist.name;
+									if (country != "" && year != "") {
+										console.log(country + " " + year);
+										API.sendChat("In what year has " + band + " been founded?");
+									} else {
+										console.log("country or year not known");
+									}			
 								}
 						}
 						simpleAJAXLib.init();	
