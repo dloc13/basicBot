@@ -895,7 +895,8 @@
 			//holy3 - request info and ask active question
 			if (basicBot.settings.quizstate) {
 				
-				var XMLsource = 'http://musicbrainz.org/ws/2/artist/?query=artist:' + obj.media.author + '&limit=1'
+				API.sendchat(obj.media.author);
+				var XMLsource = 'http://musicbrainz.org/ws/2/artist/?query=artist:' + obj.media.author + '&limit=1';
 			
 				simpleAJAXLib = {
 						
