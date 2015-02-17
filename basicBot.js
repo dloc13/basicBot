@@ -895,7 +895,7 @@
 			//holy3 - request info and ask active question
 			if (basicBot.settings.quizstate) {
 				
-				console.log(newMedia.author + " " newMedia.duration);
+				console.log(newMedia.author + " " + newMedia.duration);
 				var XMLsource = 'http://musicbrainz.org/ws/2/artist/?query=artist:' + newMedia.author + '&limit=1';
 			
 				simpleAJAXLib = {
