@@ -193,6 +193,8 @@
             botName: "basicBot",
             language: "english",
             chatLink: "https://rawgit.com/dloc13/basicBot/master/lang/en.json",
+			quizmaxpoints: 300,
+			quizstate: false,
             maximumAfk: 120,
             afkRemoval: true,
             maximumDc: 60,
@@ -918,7 +920,7 @@
 								display: function (results) {
 									var country = results.query.results.metadata.artist-list.artist.area.name;
 									var year = results.query.results.metadata.artist-list.artist.life-span.begin;
-									console.log(country + " " + year);
+									API.sendChat(country + " " + year);
 								}
 						}
 						simpleAJAXLib.init();	
