@@ -889,7 +889,41 @@
                 }, remaining + 3000);
             }
             storeToStorage();
-
+	
+			//holy3 - request info and ask active question
+			if (basicBot.settings.quizstate) {
+				
+				var XMLsource = 'http://musicbrainz.org/ws/2/artist/?query=artist:' + obj.media.author + '&limit=1'
+			
+				simpleAJAXLib = {
+						
+								init: function () {
+									this.fetchJSON(XMLsource);
+								},
+						 
+								fetchJSON: function (url) {
+									var root = 'https://query.yahooapis.com/v1/public/yql?q=';
+									var yql = 'select * from xml where url="' + url + '"';
+									var proxy_url = root + encodeURIComponent(yql) + '&format=json&diagnostics=false&callback=simpleAJAXLib.display';
+									document.getElementsByTagName('body')[0].appendChild(this.jsTag(proxy_url));
+								},
+						 
+								jsTag: function (url) {
+									var script = document.createElement('script');
+									script.setAttribute('type', 'text/javascript');
+									script.setAttribute('src', url);
+									return script;
+								},
+						 
+								display: function (results) {
+									var country = results.query.results.metadata.artist-list.artist.area.name;
+									var year = results.query.results.metadata.artist-list.artist.life-span.begin;
+									console.log(country + " " + year);
+								}
+						}
+						simpleAJAXLib.init();	
+				
+			}
         },
         eventWaitlistupdate: function (users) {
             if (users.length < 50) {
@@ -2946,7 +2980,34 @@
                             API.sendChat(subChat(basicBot.chat.youtube, {name: chat.un, link: basicBot.settings.youtubeLink}));
                     }
                 }
-            }
+            },
+			
+			//holy3: minigame (question at every song) with a predefined maximum
+			//question 1: year the band/artist started? - 1 point (first correct answer -> active player)
+			//question 2: country - 1 point (active player with max of 2 points)
+			//throw the dices (bonus): 3 (your_score + 30), 6 (score x2), [!Q2] 7 (dj_score + 7), 9 (score x3)
+			//
+			//http://musicbrainz.org/ws/2/artist/?query=artist:pegazus&limit=1
+			
+			quizCommand: {
+				command: 'holy3',  //The command to be called.
+				rank: 'bouncer', //Minimum user permission to use the command
+				type: 'startsWith', //Specify if it can accept variables or not (if so, these have to be handled yourself through the chat.message
+				functionality: function (chat, cmd) {
+					if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+					if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+					else {
+						var msg = chat.message;
+						var maxPoints = msg.substring(cmd.length + 1);
+						//var dj = API.getDJ();
+						if (!isNaN(maxPoints) && maxPoints !== "") {
+								basicBot.settings.quizmaxpoints = maxPoints;
+								basicBot.settings.quizstate = true;
+								API.sendChat("New Game Started!");
+						}
+					}
+				}
+			}
         }
     };
 
