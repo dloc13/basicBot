@@ -895,8 +895,8 @@
 			//holy3 - request info and ask active question
 			if (basicBot.settings.quizstate) {
 				
-				API.sendchat(obj.media.author);
-				var XMLsource = 'http://musicbrainz.org/ws/2/artist/?query=artist:' + obj.media.author + '&limit=1';
+				console.log(newMedia.author + " " newMedia.duration);
+				var XMLsource = 'http://musicbrainz.org/ws/2/artist/?query=artist:' + newMedia.author + '&limit=1';
 			
 				simpleAJAXLib = {
 						
@@ -921,7 +921,7 @@
 								display: function (results) {
 									var country = results.query.results.metadata.artist-list.artist.area.name;
 									var year = results.query.results.metadata.artist-list.artist.life-span.begin;
-									API.sendChat(country + " " + year);
+									console.log(country + " " + year);
 								}
 						}
 						simpleAJAXLib.init();	
