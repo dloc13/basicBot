@@ -919,8 +919,8 @@
 								},
 						 
 								display: function (results) {
-									var country = results.query.results.metadata.artist-list.artist.area.name;
-									var year = results.query.results.metadata.artist-list.artist.life-span.begin;
+									var country = results.query.results.metadata.artist-list.artist.area[1];
+									var year = results.query.results.metadata.artist-list.artist.life-span[0];
 									console.log(country + " " + year);
 								}
 						}
