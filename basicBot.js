@@ -193,8 +193,15 @@
             botName: "basicBot",
             language: "english",
             chatLink: "https://rawgit.com/dloc13/basicBot/master/lang/en.json",
-			quizmaxpoints: 300,
-			quizstate: false,
+			quizMaxpoints: 300,
+			quizState: false,
+			quizBand: "",
+			quizYear: "",
+			quizCountry: "",
+			quizCycle: 1,
+			quizLastUID: null,
+			quizLastScore: 0,
+			quizUsers: [],
             maximumAfk: 120,
             afkRemoval: true,
             maximumDc: 60,
@@ -736,6 +743,52 @@
             if (basicBot.chatUtilities.chatFilter(chat)) return void (0);
             if (!basicBot.chatUtilities.commandCheck(chat))
                 basicBot.chatUtilities.action(chat);
+				
+			//holy3
+			if (basicBot.settings.quizState && basicBot.settings.quizBand != "" && basicBot.settings.quizYear != "" && basicBot.settings.quizCountry != "") {
+			
+				var year = new RegExp(basicBot.settings.quizYear, 'g');
+				var country = new RegExp(basicBot.settings.quizCountry, 'g');
+				
+				if (chat.message.match(year) && basicBot.settings.quizCycle == 1) {
+					API.sendChat("@" + chat.un + " Correct, +1 point! From what country does " + basicBot.settings.quizBand + " come from?");
+					basicBot.settings.quizLastScore += 1;
+					basicBot.settings.quizCycle += 1;
+					basicBot.settings.quizLastUID = chat.uid;				
+				} else if (chat.message.match(country) && chat.uid == basicBot.settings.quizLastUID && basicBot.settings.quizCycle == 2) {
+					API.sendChat("@" + chat.un + " Correct, +1 point! Throw the dices when ready by typing + in the chat.");
+					basicBot.settings.quizLastScore += 1;
+					basicBot.settings.quizCycle += 1;
+				} else if (chat.message == "+" && chat.uid == basicBot.settings.quizLastUID && basicBot.settings.quizCycle == 3) {
+					basicBot.settings.quizCycle += 1;
+					var n1 = Math.floor(Math.random() * 6) + 1;
+					var n2 = Math.floor(Math.random() * 6) + 1;
+					var msg = "@" + chat.un + " You rolled a :game_die: " + n1 + " and a :game_die: " + n2;
+					switch (n1 + n2) {
+						case 3:
+							basicBot.settings.quizLastScore += 30;
+							msg += ", and hit THE HOLY 3: +30 points! Ka-Ching :moneybag:.";
+							break;
+						case 6:
+							basicBot.settings.quizLastScore *= 2;
+							msg = msg + ", and doubled your points: +" + basicBot.settings.quizLastScore + ".";
+							break;
+						case 9:
+							basicBot.settings.quizLastScore *= 3;
+							msg = msg + ", and tripled your points: +" + basicBot.settings.quizLastScore + ".";
+							break;
+						case 12:
+							basicBot.settings.quizLastScore *= 4;
+							msg = msg + ", and quadrupled your points: +" + basicBot.settings.quizLastScore + ".";
+							break;
+						default:
+							msg = msg + ", didn't hit any magic number and scored a total of " + basicBot.settings.quizLastScore + " points."
+							break;
+					}
+					API.sendChat(msg);
+					
+				}
+			}
         },
         eventUserjoin: function (user) {
             var known = false;
@@ -893,10 +946,39 @@
             storeToStorage();
 	
 			//holy3 - request info and ask active question
-			if (basicBot.settings.quizstate) {
+			if (basicBot.settings.quizState) {
 				
+				//Add personal score and check if he/she wins
+				if (basicBot.settings.quizBand != "" && basicBot.settings.quizLastScore != 0) {
+					if (basicBot.settings.quizUsers.length > 0) {
+						for (var i = 0; i < basicBot.settings.quizUsers.length; i++) {
+							if (basicBot.settings.quizUsers[i][0] == basicBot.settings.quizLastUID) {
+								basicBot.settings.quizUsers[i][2] += basicBot.settings.quizLastScore;
+								if(basicBot.settings.quizUsers[i][2] >= parseInt(basicBot.settings.quizMaxpoints)) {
+									API.sendChat("@" + basicBot.settings.quizUsers[i][1] + " You Won! Congrats, you'll be remembered for centuries. Isn't that the best price you can win? ^^");
+									basicBot.settings.quizState = false;
+								} else {
+									API.sendChat("@" + basicBot.settings.quizUsers[i][1] + " Points: " + basicBot.settings.quizLastScore + " / Total Score: " + basicBot.settings.quizUsers[i][2] + " / Missing: " + (parseInt(basicBot.settings.quizMaxpoints,10) - parseInt(basicBot.settings.quizUsers[i][2],10)).toString());
+								}
+								break;
+							} else if (i == basicBot.settings.quizUsers.length - 1) {
+								basicBot.settings.quizUsers.push([basicBot.settings.quizLastUID,basicBot.userUtilities.lookupUser(basicBot.settings.quizLastUID).username,basicBot.settings.quizLastScore]);
+								API.sendChat("@" + basicBot.settings.quizUsers[i][1] + " Points: " + basicBot.settings.quizLastScore + " / Total Score: " + basicBot.settings.quizUsers[i][2] + " / Missing: " + (parseInt(basicBot.settings.quizMaxpoints,10) - parseInt(basicBot.settings.quizUsers[i][2],10)).toString());
+							}
+						}
+					} else {
+						basicBot.settings.quizUsers.push([basicBot.settings.quizLastUID,basicBot.userUtilities.lookupUser(basicBot.settings.quizLastUID).username,basicBot.settings.quizLastScore]);
+						API.sendChat("@" + basicBot.settings.quizUsers[0][1] + " Points: " + basicBot.settings.quizLastScore + " / Total Score: " + basicBot.settings.quizUsers[0][2] + " / Missing: " + (parseInt(basicBot.settings.quizMaxpoints,10) - parseInt(basicBot.settings.quizUsers[0][2],10)).toString());
+					}	
+				}
+				
+				//Reset variables
+				basicBot.settings.quizCycle = 1;
+				basicBot.settings.quizLastScore = 0;
+				
+				//Load current song stats
 				console.log(newMedia.author + " " + newMedia.duration);
-				var XMLsource = 'http://musicbrainz.org/ws/2/artist/?query=artist:' + newMedia.author.replace(/\s{2,}/g, '%20') + '&limit=1';
+				var XMLsource = 'http://musicbrainz.org/ws/2/artist/?query=artist:' + newMedia.author.replace(/ /g,"%20") + '&limit=1';
 			
 				simpleAJAXLib = {
 						
@@ -919,13 +1001,16 @@
 								},
 						 
 								display: function (results) {
-									var country = results.query.results.metadata["artist-list"].artist.area.name;
-									var year = results.query.results.metadata["artist-list"].artist["life-span"].begin;
-									var band = results.query.results.metadata["artist-list"].artist.name;
-									if (country != "" && year != "") {
-										console.log(country + " " + year);
-										API.sendChat("In what year has " + band + " been founded?");
-									} else {
+									try {
+										basicBot.settings.quizCountry = results.query.results.metadata["artist-list"].artist.area.name;
+										basicBot.settings.quizYear = results.query.results.metadata["artist-list"].artist["life-span"].begin.match(/\d{4}/);
+										basicBot.settings.quizBand = results.query.results.metadata["artist-list"].artist.name;
+										if (basicBot.settings.quizCountry != "" && basicBot.settings.quizYear != "") {
+											console.log(basicBot.settings.quizCountry + " " + basicBot.settings.quizYear);
+											API.sendChat("In what year has " + basicBot.settings.quizBand + " been founded?");
+										}
+									} catch (e) {
+										API.sendChat("Sorry, musicbrainz doesn't seem to have all needed info :( We'll continue at the next play.");
 										console.log("country or year not known");
 									}			
 								}
@@ -3008,12 +3093,19 @@
 					else {
 						var msg = chat.message;
 						var maxPoints = msg.substring(cmd.length + 1);
-						//var dj = API.getDJ();
 						if (!isNaN(maxPoints) && maxPoints !== "") {
-								basicBot.settings.quizmaxpoints = maxPoints;
-								basicBot.settings.quizstate = true;
-								API.sendChat("New Game Started!");
+								basicBot.settings.quizMaxpoints = maxPoints;		
 						}
+						//reset 
+						basicBot.settings.quizBand = "";
+						basicBot.settings.quizYear = "";
+						basicBot.settings.quizCountry = "";
+						basicBot.settings.quizCycle = 1;
+						basicBot.settings.quizLastUID = null;
+						basicBot.settings.quizLastScore = 0;
+						basicBot.settings.quizUsers = [];
+						basicBot.settings.quizState = true;
+						API.sendChat("Holy3 will start at the next play!");
 					}
 				}
 			}
