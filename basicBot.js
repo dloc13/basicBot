@@ -1012,7 +1012,7 @@
 											API.sendChat("In what year was " + basicBot.settings.quizBand + " founded?");
 										}
 									} catch (e) {
-										API.sendChat("Sorry, musicbrainz doesn't seem to have all needed info :( We'll continue at the next play.");
+										API.sendChat("Sorry, musicbrainz doesn't seem to recognize this band or artist. We'll continue during the next play.");
 										console.log("country or year not known");
 									}			
 								}
@@ -3108,7 +3108,7 @@
 						basicBot.settings.quizLastScore = 0;
 						basicBot.settings.quizUsers = [];
 						basicBot.settings.quizState = true;
-						API.sendChat("Holy3 will start at the next play!");
+						API.sendChat("Holy3 will start at the next play! Rules of the Game: The game is currently set to " + maxPoints + " points to win the game. The current DJ is not allowed to guess. Need to answer 2 questions. You can only answer 2nd question IF you correctly guessed the first question.");
 					}
 				}
 			}
