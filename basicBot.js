@@ -3108,7 +3108,7 @@
 						basicBot.settings.quizLastScore = 0;
 						basicBot.settings.quizUsers = [];
 						basicBot.settings.quizState = true;
-						API.sendChat("Holy3 will start at the next play! Rules of the Game: The game is currently set to " + maxPoints + " points to win the game. The current DJ is not allowed to guess. Need to answer 2 questions. You can only answer 2nd question IF you correctly guessed the first question.");
+						API.sendChat("Holy3 Started! Rules: Holy3 is a trivia game and is currently set to " + maxPoints + " points to win. The current DJ is not allowed to guess. Need to answer 2 questions. You can only answer 2nd Q IF you correctly guessed the first Q.");
 					}
 				}
 			}
