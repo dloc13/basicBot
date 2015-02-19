@@ -756,10 +756,10 @@
 					basicBot.settings.quizCycle += 1;
 					basicBot.settings.quizLastUID = chat.uid;				
 				} else if (chat.message.match(country) && chat.uid == basicBot.settings.quizLastUID && basicBot.settings.quizCycle == 2) {
-					API.sendChat("@" + chat.un + " Correct, +1 point! Throw the dices when ready by typing + in the chat.");
+					API.sendChat("@" + chat.un + " Correct, +1 point! Throw the dices when ready by typing 3 in the chat.");
 					basicBot.settings.quizLastScore += 1;
 					basicBot.settings.quizCycle += 1;
-				} else if (chat.message == "+" && chat.uid == basicBot.settings.quizLastUID && basicBot.settings.quizCycle == 3) {
+				} else if (chat.message == "3" && chat.uid == basicBot.settings.quizLastUID && basicBot.settings.quizCycle == 3) {
 					basicBot.settings.quizCycle += 1;
 					var n1 = Math.floor(Math.random() * 6) + 1;
 					var n2 = Math.floor(Math.random() * 6) + 1;
@@ -954,7 +954,7 @@
 						for (var i = 0; i < basicBot.settings.quizUsers.length; i++) {
 							if (basicBot.settings.quizUsers[i][0] == basicBot.settings.quizLastUID) {
 								basicBot.settings.quizUsers[i][2] += basicBot.settings.quizLastScore;
-								if(basicBot.settings.quizUsers[i][2] >= parseInt(basicBot.settings.quizMaxpoints)) {
+								if(basicBot.settings.quizUsers[i][2] >= parseInt(basicBot.settings.quizMaxpoints,10)) {
 									API.sendChat("@" + basicBot.settings.quizUsers[i][1] + " You Won! Congrats, you'll be remembered for centuries. Isn't that the best price you can win? ^^");
 									basicBot.settings.quizState = false;
 								} else {
@@ -975,6 +975,8 @@
 				//Reset variables
 				basicBot.settings.quizCycle = 1;
 				basicBot.settings.quizLastScore = 0;
+				
+				if (basicBot.settings.quizState) {
 				
 				//Load current song stats
 				console.log(newMedia.author + " " + newMedia.duration);
@@ -1016,6 +1018,7 @@
 								}
 						}
 						simpleAJAXLib.init();	
+				}
 				
 			}
         },
