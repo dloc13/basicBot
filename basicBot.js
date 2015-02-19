@@ -745,7 +745,7 @@
                 basicBot.chatUtilities.action(chat);
 				
 			//holy3
-			if (basicBot.settings.quizState && basicBot.settings.quizBand != "" && basicBot.settings.quizYear != "" && basicBot.settings.quizCountry != "") {
+			if (basicBot.settings.quizState && basicBot.settings.quizBand != "" && basicBot.settings.quizYear != "" && basicBot.settings.quizCountry != "" && chat.uid != basicBot.room.currentDJID) {
 			
 				var year = new RegExp(basicBot.settings.quizYear, 'g');
 				var country = new RegExp(basicBot.settings.quizCountry, 'g');
@@ -766,8 +766,8 @@
 					var msg = "@" + chat.un + " You rolled a :game_die: " + n1 + " and a :game_die: " + n2;
 					switch (n1 + n2) {
 						case 3:
-							basicBot.settings.quizLastScore += 30;
-							msg += ", and hit THE HOLY 3: +30 points! Ka-Ching :moneybag:.";
+							basicBot.settings.quizLastScore += 10;
+							msg += ", and hit THE HOLY 3: +12 points! Ka-Ching :moneybag:.";
 							break;
 						case 6:
 							basicBot.settings.quizLastScore *= 2;
