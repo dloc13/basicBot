@@ -8,7 +8,7 @@
     "online": "/me Miss GroupieBot is back! Hell Yeah!",
 
 
-    "welcome": "/me Rock ipedia has summoned you! Welcome %%NAME%%. Please take a minute to read our room rules! http://goo.gl/wQxAOW",
+    "welcome": "/me Rockipedia has summoned you! Welcome %%NAME%%. Please take a minute to read our room rules! http://dloc13.wix.com/rockipedia",
     "welcomeback": "/me Welcome back, %%NAME%%. Keep on rocking!",
     "songknown": "/me :repeat: This song has been played %%PLAYS%% time(s) in the last %%TIMETOTAL%%, last play was %%LASTTIME%% ago. :repeat:",
     "timelimit": "/me @%%NAME%%, your song is longer than %%MAXLENGTH%% minutes, you need permission to play longer songs.",

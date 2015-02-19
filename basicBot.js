@@ -1009,7 +1009,7 @@
 										basicBot.settings.quizBand = results.query.results.metadata["artist-list"].artist.name;
 										if (basicBot.settings.quizCountry != "" && basicBot.settings.quizYear != "") {
 											console.log(basicBot.settings.quizCountry + " " + basicBot.settings.quizYear);
-											API.sendChat("In what year has " + basicBot.settings.quizBand + " been founded?");
+											API.sendChat("In what year was " + basicBot.settings.quizBand + " founded?");
 										}
 									} catch (e) {
 										API.sendChat("Sorry, musicbrainz doesn't seem to have all needed info :( We'll continue at the next play.");
