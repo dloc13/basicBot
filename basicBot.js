@@ -925,6 +925,7 @@
                 basicBot.room.historyList.push([obj.media.cid, +new Date()]);
             }
             var newMedia = obj.media;
+			basicBot.settings.newMedia = obj.media;
             if (basicBot.settings.timeGuard && newMedia.duration > basicBot.settings.maximumSongLength * 60 && !basicBot.room.roomevent) {
                 var name = obj.dj.username;
                 API.sendChat(subChat(basicBot.chat.timelimit, {name: name, maxlength: basicBot.settings.maximumSongLength}));
@@ -958,17 +959,17 @@
 									API.sendChat("@" + basicBot.settings.quizUsers[i][1] + " You Won! Congrats, you'll be remembered for centuries. Isn't that the best price you can win? ^^");
 									basicBot.settings.quizState = false;
 								} else {
-									API.sendChat("@" + basicBot.settings.quizUsers[i][1] + " Points: " + basicBot.settings.quizLastScore + " / Total Score: " + basicBot.settings.quizUsers[i][2] + " / Missing: " + (parseInt(basicBot.settings.quizMaxpoints,10) - parseInt(basicBot.settings.quizUsers[i][2],10)).toString());
+									API.sendChat("@" + basicBot.settings.quizUsers[i][1] + " Points: " + basicBot.settings.quizLastScore + " / Total Score: " + basicBot.settings.quizUsers[i][2] + " / Points Remaining: " + (parseInt(basicBot.settings.quizMaxpoints,10) - parseInt(basicBot.settings.quizUsers[i][2],10)).toString());
 								}
 								break;
 							} else if (i == basicBot.settings.quizUsers.length - 1) {
 								basicBot.settings.quizUsers.push([basicBot.settings.quizLastUID,basicBot.userUtilities.lookupUser(basicBot.settings.quizLastUID).username,basicBot.settings.quizLastScore]);
-								API.sendChat("@" + basicBot.settings.quizUsers[i][1] + " Points: " + basicBot.settings.quizLastScore + " / Total Score: " + basicBot.settings.quizUsers[i][2] + " / Missing: " + (parseInt(basicBot.settings.quizMaxpoints,10) - parseInt(basicBot.settings.quizUsers[i][2],10)).toString());
+								API.sendChat("@" + basicBot.settings.quizUsers[i][1] + " Points: " + basicBot.settings.quizLastScore + " / Total Score: " + basicBot.settings.quizUsers[i][2] + " / Points Remaining: " + (parseInt(basicBot.settings.quizMaxpoints,10) - parseInt(basicBot.settings.quizUsers[i][2],10)).toString());
 							}
 						}
 					} else {
 						basicBot.settings.quizUsers.push([basicBot.settings.quizLastUID,basicBot.userUtilities.lookupUser(basicBot.settings.quizLastUID).username,basicBot.settings.quizLastScore]);
-						API.sendChat("@" + basicBot.settings.quizUsers[0][1] + " Points: " + basicBot.settings.quizLastScore + " / Total Score: " + basicBot.settings.quizUsers[0][2] + " / Missing: " + (parseInt(basicBot.settings.quizMaxpoints,10) - parseInt(basicBot.settings.quizUsers[0][2],10)).toString());
+						API.sendChat("@" + basicBot.settings.quizUsers[0][1] + " Points: " + basicBot.settings.quizLastScore + " / Total Score: " + basicBot.settings.quizUsers[0][2] + " / Points Remaining: " + (parseInt(basicBot.settings.quizMaxpoints,10) - parseInt(basicBot.settings.quizUsers[0][2],10)).toString());
 					}	
 				}
 				
@@ -3078,6 +3079,56 @@
                     }
                 }
             },
+			
+			genreCommand: {
+				command: 'genre',  //The command to be called.
+				rank: 'user', //Minimum user permission to use the command
+				type: 'exact', //Specify if it can accept variables or not (if so, these have to be handled yourself through the chat.message
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+
+					simpleAJAXLib = {
+						
+								init: function () {
+									var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettopTags&artist=' + newMedia.author + '&api_key=b3cb78999a38750fc3d76c51ba2bf6bb'
+									this.fetchJSON(XMLsource);
+								},
+						 
+								fetchJSON: function (url) {
+									var root = 'https://query.yahooapis.com/v1/public/yql?q=';
+									var yql = 'select * from xml where url="' + url + '"';
+									var proxy_url = root + encodeURIComponent(yql) + '&format=json&diagnostics=false&callback=simpleAJAXLib.display';
+									document.getElementsByTagName('body')[0].appendChild(this.jsTag(proxy_url));
+								},
+						 
+								jsTag: function (url) {
+									var script = document.createElement('script');
+									script.setAttribute('type', 'text/javascript');
+									script.setAttribute('src', url);
+									return script;
+								},
+						 
+								display: function (results) {
+								//http://ws.audioscrobbler.com/2.0/?method=artist.gettopTags&artist=Blur&api_key=b3cb78999a38750fc3d76c51ba2bf6bb
+									try {
+										var genres;
+										genres += results.query.results.lfm.toptags.tag[0].name;
+										genres += ", ";
+										genres += results.query.results.lfm.toptags.tag[1].name;
+										genres += ", ";
+										genres += results.query.results.lfm.toptags.tag[2].name;
+										API.sendChat("@" + chat.un + " " + genres);
+									} catch (e) {
+										API.sendChat("Sorry, last.fm didn't find any tags for this band.");
+									}			
+								}
+						}
+						simpleAJAXLib.init();	
+					}
+				}
+			},
 			
 			//holy3: minigame (question at every song) with a predefined maximum
 			//question 1: year the band/artist started? - 1 point (first correct answer -> active player)
