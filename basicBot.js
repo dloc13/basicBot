@@ -3092,7 +3092,8 @@
 					simpleAJAXLib = {
 						
 								init: function () {
-									var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettopTags&artist=' + API.getMedia().author + '&api_key=b3cb78999a38750fc3d76c51ba2bf6bb'
+									var artist = API.getMedia().author;
+									var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettopTags&artist=' + artist.replace(/&/g,"%26").replace(/ /g,"%20") + '&api_key=b3cb78999a38750fc3d76c51ba2bf6bb'
 									this.fetchJSON(url);
 								},
 						 
