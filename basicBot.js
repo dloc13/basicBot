@@ -3112,7 +3112,7 @@
 						 
 								display: function (results) {
 								//http://ws.audioscrobbler.com/2.0/?method=artist.gettopTags&artist=Blur&api_key=b3cb78999a38750fc3d76c51ba2bf6bb
-								//todo: character replace (ie. of mice & men -> &) 
+								//todo: character replace (ie. of mice & men -> &)
 									try {
 										var genres;
 										genres = results.query.results.lfm.toptags.tag[0].name;
