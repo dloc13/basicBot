@@ -202,6 +202,7 @@
 			quizLastUID: null,
 			quizLastScore: 0,
 			quizUsers: [],
+			author: null,
             maximumAfk: 120,
             afkRemoval: true,
             maximumDc: 60,
@@ -925,7 +926,6 @@
                 basicBot.room.historyList.push([obj.media.cid, +new Date()]);
             }
             var newMedia = obj.media;
-			basicBot.settings.newMedia = obj.media;
             if (basicBot.settings.timeGuard && newMedia.duration > basicBot.settings.maximumSongLength * 60 && !basicBot.room.roomevent) {
                 var name = obj.dj.username;
                 API.sendChat(subChat(basicBot.chat.timelimit, {name: name, maxlength: basicBot.settings.maximumSongLength}));
@@ -3092,8 +3092,8 @@
 					simpleAJAXLib = {
 						
 								init: function () {
-									var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettopTags&artist=' + newMedia.author + '&api_key=b3cb78999a38750fc3d76c51ba2bf6bb'
-									this.fetchJSON(XMLsource);
+									var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettopTags&artist=' + API.getMedia().author + '&api_key=b3cb78999a38750fc3d76c51ba2bf6bb'
+									this.fetchJSON(url);
 								},
 						 
 								fetchJSON: function (url) {
@@ -3112,9 +3112,10 @@
 						 
 								display: function (results) {
 								//http://ws.audioscrobbler.com/2.0/?method=artist.gettopTags&artist=Blur&api_key=b3cb78999a38750fc3d76c51ba2bf6bb
+								//todo: character replace (ie. of mice & men -> &)
 									try {
 										var genres;
-										genres += results.query.results.lfm.toptags.tag[0].name;
+										genres = results.query.results.lfm.toptags.tag[0].name;
 										genres += ", ";
 										genres += results.query.results.lfm.toptags.tag[1].name;
 										genres += ", ";
